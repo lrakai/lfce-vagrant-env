@@ -13,9 +13,9 @@ Vagrant.configure("2") do |config|
       nodeconfig.vm.network "forwarded_port", guest: 22, host: node[:ssh_host_port], id: "ssh"
       nodeconfig.ssh.insert_key = false # uses vagrant insecure key
 
-      nodeconfig.vm.provision "shell", path: "provisioners/common.sh"
+      nodeconfig.vm.provision "common", type: "shell", path: "provisioners/common.sh"
       if File.file?("provisioners/#{node[:hostname]}.sh")
-        nodeconfig.vm.provision "shell", path: "provisioners/#{node[:hostname]}.sh"
+        nodeconfig.vm.provision node[:hostname], type: "shell", path: "provisioners/#{node[:hostname]}.sh"
       end
 
       nodeconfig.vm.provider "virtualbox" do |vb|
