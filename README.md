@@ -25,8 +25,15 @@ This automatically connects you to the `box` node in the exam environment. Prepa
 ```sh
 sudo -i
 yum install -y pssh
-pssh -H box -H node1 -H node2 yum install -y tmux bash-completion bash-completion-extras
+pssh -H box -H node1 -H node2 "yum install -y tmux bash-completion bash-completion-extras && mandb"
 exec bash
+```
+
+## Tips
+
+```sh
+man -k ... # search for commands by name, description
+man -wK ... # search for commands in man pages
 ```
 
 ## Cleaning Up
