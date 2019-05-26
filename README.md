@@ -20,7 +20,14 @@ Bring up the exam environment with
 bash up_exam.sh
 ```
 
-This automatically connects you to the `box` node in the exam environment.
+This automatically connects you to the `box` node in the exam environment. Prepare the systems as you prefer using packages from standard repos, for example:
+
+```sh
+sudo -i
+yum install -y pssh
+pssh -H box -H node1 -H node2 yum install -y tmux bash-completion bash-completion-extras
+exec bash
+```
 
 ## Cleaning Up
 

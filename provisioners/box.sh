@@ -1,6 +1,6 @@
 sed -i "s/.*StrictHostKeyChecking.*/StrictHostKeyChecking no/" /etc/ssh/ssh_config
 
-nodes=("node1" "node2")
+nodes=("box" "node1" "node2")
 
 for i in $(seq 0 $(( ${#nodes[@]} - 1 )) ); do
     if ! grep -q ${nodes[$i]} /etc/ssh/ssh_config ; then
