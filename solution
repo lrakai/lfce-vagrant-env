@@ -6,7 +6,15 @@ vi exports
     /nfsshare 10.0.0.0/24(ro) *.local.domain(rw,all_squash)
 systemctl start nfs
 systemctl enable nfs
-
+firewall-cmd --add-service={nfs,mountd} --permanent
+firewall-cmd --reload
+firewall-cmd --set-log-denied=all
+firewall-cmd --add-port=20048/tcp --permanent
+firewall-cmd --reload
 
 node2 (client)
 yum install -y nfs-utils
+showmount -e node1
+mount -t nfs node1:/nfsshare /mnt
+touch /mnt/test # error ro
+mount | grep nfsshare
