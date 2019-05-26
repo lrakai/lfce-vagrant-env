@@ -1,0 +1,8 @@
+node1 (server)
+yum install -y nfs-utils
+
+
+
+
+node2 (client)
+yum install -y nfs-utils
