@@ -1,3 +1,5 @@
+sed -i "s/.*StrictHostKeyChecking.*/StrictHostKeyChecking no/" /etc/ssh/ssh_config
+
 nodes=("node1" "node2")
 
 for i in $(seq 0 $(( ${#nodes[@]} - 1 )) ); do
