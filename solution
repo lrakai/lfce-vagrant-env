@@ -1,7 +1,11 @@
 node1 (server)
 yum install -y nfs-utils
-
-
+man exports # /examples
+mkdir /nfsshare
+vi exports 
+    /nfsshare 10.0.0.0/24(ro) *.local.domain(rw,all_squash)
+systemctl start nfs
+systemctl enable nfs
 
 
 node2 (client)
