@@ -1,1 +1,1 @@
-nfs share nfsv4, ro to subnet, rw to domain with all_squash, set default dir 664 and file 775 permissions
+nfs share nfsv4, ro to subnet, rw to domain with all_squash, set default dir 755 and file 644 permissions

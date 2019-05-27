@@ -1,16 +1,35 @@
 node1 (server)
-yum install -y nfs-utils
+yum install -y nfs-utils nfs4-acl-tools
 man exports # /examples
 mkdir /nfsshare
+chown nfsnobody:nfsnobody /nfsshare
 vi exports 
-    /nfsshare 10.0.0.0/24(ro) *.local.domain(rw,all_squash)
-systemctl start nfs
-systemctl enable nfs
+    /nfsshare 10.0.0.0/24(ro) example.com(rw,all_squash)
+systemctl start nfs # brings up nfs-mountd, and reads new exports (no need to exportfs -a); cat /usr/lib/systemd/system/nfs.service
+systemctl enable nfs # systemctl status nfs # check errors
+cat /var/lib/nfs/etab && exportfs -s # both check exports 
+systemctl start firewalld
+systemctl enable firewalld
 firewall-cmd --add-service={nfs,mountd} --permanent
 firewall-cmd --reload
 firewall-cmd --set-log-denied=all
-firewall-cmd --add-port=20048/tcp --permanent
+firewall-cmd --add-port=20048/tcp --permanent # only for showmount/portmapper
 firewall-cmd --reload
+# all_squash sets all writes to nfsnobody
+# man nfs4_acls # for examples
+# acl should be supported for mount of the shared fs # always enabled for xfs, enabled unless explicitly disabled for ext4  
+mount HOST_IP_ADDR/nfsshare /mnt 
+nfs4_setfacl -e /mnt
+# vi acls
+#     A::OWNER@:RWX
+#     A::GROUP@:R
+#     A::EVERYONE@:R
+#     A:fdi:OWNER@:RWX
+#     A:fdi:GROUP@:RX
+#     A:fdi:EVERYONE@:RX  # -> files 644, dirs 755
+# nfs4_setfacl -R -S acls /mnt
+
+umount /mnt
 
 node2 (client)
 yum install -y nfs-utils
@@ -18,3 +37,5 @@ showmount -e node1
 mount -t nfs node1:/nfsshare /mnt
 touch /mnt/test # error ro
 mount | grep nfsshare
+vi /etc/fstab
+    node1:/nfsshare /mnt nfs ro,_netdev 0 0 # _netdev required
