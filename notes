@@ -1,0 +1,3 @@
+create keys, self-signed cert
+configure httpd to disable http, listen on non-default port https
+Only allow traffic from node1, node2

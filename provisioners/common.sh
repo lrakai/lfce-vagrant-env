@@ -16,3 +16,7 @@ for i in $(seq 0 $(( ${#nodes[@]} - 1 )) ); do
         echo "${ips[$i]} ${nodes[$i]} " >> /etc/hosts
     fi
 done
+
+yum install -y firewalld
+systemctl enable firewalld
+systemctl start firewalld
