@@ -1,0 +1,1 @@
+lvm vgcreate, stripe, mirror, extend (use extents), mount

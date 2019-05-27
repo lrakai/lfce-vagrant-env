@@ -8,8 +8,8 @@ if ! test -f /root/.ssh/authorized_keys || ! grep -q insecure /root/.ssh/authori
     echo "$insecure_public_key vagrant insecure public key" >> /root/.ssh/authorized_keys
 fi
 
-nodes=("box" "node1" "node2")
-ips=("10.0.0.100" "10.0.0.101" "10.0.0.102")
+nodes=("box" "node1")
+ips=("10.0.0.100" "10.0.0.101")
 
 for i in $(seq 0 $(( ${#nodes[@]} - 1 )) ); do
     if ! grep -q ${nodes[$i]} /etc/hosts ; then
