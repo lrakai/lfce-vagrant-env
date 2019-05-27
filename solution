@@ -1,0 +1,11 @@
+box
+lsblk
+yum install -y lvm2
+vgcreate myvg /dev/sdb /dev/sdc /dev/sdd
+lvcreate -i 2 -I 1M -L 20M -n striped myvg /dev/sdb /dev/sdc # lvdisplay/pvdisplay/lvs/pvs to check, -i is total stripes
+lvcreate -m 1 -l 10 -n mirror myvg /dev/sdb /dev/sdc # -m is number of mirrors (exclusive of original)
+lvcreate -l 50%PVS -n disk myvg /dev/sdd  # %FREE is for whole vg, %PVS is free space on specified pvs
+mkfs.ext4 /dev/myvg/disk
+mount /dev/myvg/disk /mnt
+lvresize -l +100%PVS -r /dev/myvg/disk /dev/sdd
+df -h

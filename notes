@@ -1,1 +1,4 @@
-lvm vgcreate, stripe, mirror, extend (use extents), mount
+lvm vgcreate myvg across 3 pvs
+lv stripe named striped, num stripes 1, stripsize 1MB, total size 20 MB, only use /dev/sd{b,c}
+lv mirror named mirror, num mirrors 1, size of 10 extents per mirror, only use /dev/sd{b,c}
+create 50% free of /dev/sdd pv named disk, format ext4, extend 100%, mount, only use /dev/sdd
