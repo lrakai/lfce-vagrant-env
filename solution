@@ -28,7 +28,6 @@ nfs4_setfacl -e /mnt
 #     A:fdi:GROUP@:RX
 #     A:fdi:EVERYONE@:RX  # -> files 644, dirs 755
 # nfs4_setfacl -R -S acls /mnt
-
 umount /mnt
 
 node2 (client)
@@ -38,4 +37,4 @@ mount -t nfs node1:/nfsshare /mnt
 touch /mnt/test # error ro
 mount | grep nfsshare
 vi /etc/fstab
-    node1:/nfsshare /mnt nfs ro,_netdev 0 0 # _netdev required
+    node1:/nfsshare /mnt nfs defaults 0 0
