@@ -1,0 +1,10 @@
+node1
+sudo -i
+yum install -y httpd mod_ssl httpd-manual lynx
+
+# Sample config and details in /usr/share/httpd/manual/ssl/ssl_howto.html
+# Sample key/cert/ca commands/CA.sh in /usr/share/doc/httpd-manual/ssl/ssl_faq.html
+# openssl req -new -x509 -nodes -out server.crt -keyout server.key
+# 
+openssl s_client -connect localhost:443 -state -debug
+curl https://localhost
