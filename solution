@@ -1,0 +1,71 @@
+yum install -y bind bind-utils
+vi /etc/named.conf # disable ipv6, dnssec, default zone & zone include, add views
+ # listen-on port 53 { any; };
+ # allow-query     { any; };
+ # recursion no;
+ # see /usr/share/doc/bind-9.9.4/sample/etc/named.conf for example
+cat >> /etc/named.conf <<EOF
+view "internal" {
+        match-clients   { 10.0.0.0/24; };
+        zone "example.com" {
+                type master;
+                file "internal.zone";
+        };
+};
+
+view "external" {
+        # views processed sequentially, so last view is a catch-all (! can also negate)
+        # match any not matching prior views
+        match-clients   { any; };
+        zone "example.com" {
+                type master;
+                file "external.zone";
+        };
+};
+EOF
+
+named-checkconf # check syntax
+
+cat > /var/named/internal.zone <<EOF
+$TTL 3H
+@       IN SOA  @ root (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        NS      @
+        A       127.0.0.1
+test    A       10.0.0.101
+cname   CNAME   test
+EOF
+
+cat > /var/named/external.zone <<EOF
+$TTL 3H
+@       IN SOA  @ root (
+                                        0       ; serial
+                                        1D      ; refresh
+                                        1H      ; retry
+                                        1W      ; expire
+                                        3H )    ; minimum
+        NS      @
+        A       127.0.0.1
+test    A       8.8.8.8
+cname   CNAME   google.com. # need the dot to avoid google.com.example.com
+EOF
+
+# check zones with 
+named-checkzone example.com internal.zone
+named-checkzone example.com external.zone
+
+firewall-cmd --add-service=dns
+firewall-cmd --add-service=dns --permanent
+
+systemctl start named
+
+#update /etc/resolv.conf
+# search example.com
+# nameserver 10.0.0.101
+
+dig test
+nslookup test
