@@ -36,6 +36,7 @@ man -k ... # search for commands by name, description
 man -wK ... # search for commands in man pages
 yum provides */binary # search for package providing a binary
 rpm -qf $(which binary) # which installed package provides a binary
+yum install setroubleshoot-server; sealert -a /var/log/audit/audit.log # Suggest resolutions for SELinux AVCs
 ```
 
 ## Cleaning Up
