@@ -1,10 +1,21 @@
 node1
 sudo -i
-yum install -y httpd mod_ssl httpd-manual lynx
+yum install -y httpd httpd-manual mod_ssl crypto-utils # crypto-utils for genkey
 
 # Sample config and details in /usr/share/httpd/manual/ssl/ssl_howto.html
 # Sample key/cert/ca commands/CA.sh in /usr/share/doc/httpd-manual/ssl/ssl_faq.html
 # openssl req -new -x509 -nodes -out server.crt -keyout server.key
 # 
-openssl s_client -connect localhost:443 -state -debug
-curl https://localhost
+semanage port -a -t http_port_t -p tcp 779  # found with yum install setroubleshoot-server; sealert -a /var/log/audit/audit.log
+openssl genpkey -algorithm RSA -out key.pem
+genkey --genreq --test www.example.com
+genkey --makeca --test www.example.com
+openssl x509 -req -in /etc/pki/tls/certs/www.example.com.0.csr -out site.crt -CA /etc/pki/CA/www.example.com -CAkey /etc/pki/CA/private/www.example.com -CAcreateserial # man x509, defaults to 30 days
+# config conf.d/ssl.conf key at key -> /etc/pki/tls/private/www.example.com.key & cert -> site.crt
+# config conf/httpd.conf Listen 80 -> #Listen 80
+#                        var/www Require all granted -> Require all denied
+#                        var/www/html Require all granted -> Require host node1 node2
+systemctl restart httpd
+iptables -A INPUT -p tcp --dport 779 -j ACCEPT && iptables-save > /etc/sysconfic/iptables or firewall-cmd --add-port 779/tcp && firewall-cmd --add-port 779/tcp 
+openssl s_client -connect localhost:779 -state -debug
+curl https://localhost --insecure
