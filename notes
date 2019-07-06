@@ -1,0 +1,3 @@
+make internal (10.0.0.0/24) and external view (everything else)
+internal test.example.com -> 10.0.0.100
+external test.example.com -> 8.8.8.8
