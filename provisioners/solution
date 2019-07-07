@@ -1,0 +1,3 @@
+yum install -y docker
+systemctl enable --now docker
+docker run --restart=always --name=httpd -d -p 8000:80 httpd:2.4  # -p host:container
