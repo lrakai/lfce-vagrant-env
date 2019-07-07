@@ -1,0 +1,2 @@
+Install docker
+run httpd, listen on port 8000, always start when server boots
