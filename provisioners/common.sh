@@ -16,3 +16,9 @@ for i in $(seq 0 $(( ${#nodes[@]} - 1 )) ); do
         echo "${ips[$i]} ${nodes[$i]} " >> /etc/hosts
     fi
 done
+
+users=("bob" "alice")
+for user in ${users[@]}; do
+    useradd $user
+    echo password | passwd $user --stdin
+done
