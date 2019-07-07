@@ -1,0 +1,11 @@
+yum install /tmp/kernel-3.10.0-957.21.3.el7.x86_64.rpm
+# this automatically sets the /boot/grubenv and grub.cfg first entry to the new kernel to use it in my tests
+# Might not always work by default
+
+# To set a specific version
+# List versions available
+grep ^menuentry /boot/grub2/grub.cfg
+
+# select the version you want e.g. the first match is 0, second is 1, ...
+grub2-set-default 1 # use second menuentry
+grub2-mkconfig -o /boot/grub2/grub.cfg # regen grub.cfg
