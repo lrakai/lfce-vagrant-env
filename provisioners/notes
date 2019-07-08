@@ -1,1 +1,1 @@
-Firewall all traffic from user bob
+Firewall all traffic from user bob on node1 (outgoing from system node1)
