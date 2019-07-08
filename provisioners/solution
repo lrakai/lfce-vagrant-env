@@ -1,0 +1,16 @@
+# man iptables-extensions; search owner -> -m owner --uid-owner username
+
+#bob_id=$(id bob | sed 's/uid=\([0-9]*\).*/\1/g')
+
+iptables -I OUTPUT 2 -m owner --uid-owner bob -j DROP
+iptables -I OUTPUT 1 -m owner --uid-owner bob -d node2 -p tcp --dport 80 -j ACCEPT
+or
+# man firewall-cmd for --direct --add-rule syntax (use filter table [view tables in man iptables or tab completion])
+firewall-cmd --direct --permanent --add-rule ipv4 filter OUTPUT 2 -m owner --uid-owner bob -j DROP
+firewall-cmd --direct --permanent --add-rule ipv4 filter OUTPUT 1 -m owner --uid-owner bob -p tcp --dport 80 -d node2 -j ACCEPT
+firewall-cmd --reload
+
+# test
+su - bob # password = password
+curl github.com
+curl node2
