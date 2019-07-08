@@ -1,1 +1,2 @@
 Firewall all traffic from user bob on node1 (outgoing from system node1)
+  except port 80 on node2
