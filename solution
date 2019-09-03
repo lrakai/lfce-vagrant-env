@@ -1,0 +1,19 @@
+# system rules in /usr/lib/udev/rules.d
+# test rules with udevadm test /dev/path
+
+fdisk /dev/sdb
+mkfs.ext4 /dev/sdb
+mkdir /auto
+
+# Rule files must have the extension .rules; other extensions are ignored.
+udevadm info /dev/sdb # list subsystem, uuid, etc. E: rows are env{...} keys
+uuid=$(udevadm info /dev/sdb | grep "ID_FS_UUID=" | cut -f2 -d=)
+# Use file beginning with number > 60 or uuid is not available
+echo "ACTION==\"add\", SUBSYSTEM==\"block\", ENV{ID_FS_UUID}==\"$uuid\", SYMLINK+=\"auto\"" > /etc/udev/rules.d/66-disk.rules
+
+# Test rule, view errors during rules file loading section near the top
+udevadm test /block/sdb
+# Trigger rule (not needed, test will trigger add action by default)
+# udevadm trigger -c add /block/sdb
+
+echo "/dev/auto /auto ext4 defaults 0 0" > /etc/fstab 
