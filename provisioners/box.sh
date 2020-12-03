@@ -1,3 +1,4 @@
+#!/bin/bash
 sed -i "s/.*StrictHostKeyChecking.*/StrictHostKeyChecking no/" /etc/ssh/ssh_config
 
 nodes=("box" "node1" "node2")

@@ -12,6 +12,12 @@ This repo brings up an Linux Foundation Certified Engineer (LFCE) Centos 7 exam 
 
 You can create tasks to complete based on the [LFCE domains and competencies](https://training.linuxfoundation.org/certification/linux-foundation-certified-engineer-lfce/#domains).
 
+## Prerequisites
+If you have not already installed vagrant and VirtualBox, you can run 
+```sh
+bash lib/prerequisites.sh
+```
+
 ## Getting Started
 
 Bring up the exam environment with
