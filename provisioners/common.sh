@@ -1,3 +1,4 @@
+#!/bin/bash
 yum install -y epel-release
 
 if [ ! -d /root/.ssh ]; then
